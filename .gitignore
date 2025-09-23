@@ -1,0 +1,17 @@
+# Ignore everything by default
+*
+
+# But don't ignore directories (so we can traverse into them)
+!*/
+
+# Allow SQL files
+!*.sql
+
+# Allow Java files
+!*.java
+
+# Allow PNG files
+!*.png
+
+# Don't ignore this .gitignore file itself
+!.gitignore
