@@ -24,6 +24,17 @@ public class cd210667_GenresOperations implements GenresOperations {
         }
     }
 
+    //helper method to close connection - not part of interface
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException("DB connection close failed", e);
+            }
+        }
+    }
+
     @Override
     public Integer addGenre(String name) {
         if (name == null || name.isBlank()) return null;
