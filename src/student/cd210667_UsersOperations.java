@@ -85,6 +85,33 @@ public class cd210667_UsersOperations implements UsersOperations {
         }
     }
 
+    public List<Integer> getTopRatedMovies(Integer userId, Integer limit) {
+        List<Integer> out = new ArrayList<>();
+        if (userId == null) return out;
+
+        // default limit ako je null ili <= 0
+        int lim = (limit == null || limit <= 0) ? 10 : limit;
+
+        ensureConnection();
+
+        final String sql =
+                "SELECT TOP (?) o.FilmID " +
+                        "FROM dbo.Ocena o " +
+                        "WHERE o.KorisnikID = ? " +
+                        "ORDER BY o.Ocena DESC, o.Vreme DESC, o.FilmID ASC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, lim);
+            ps.setInt(2, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) out.add(rs.getInt(1));
+            }
+        } catch (SQLException ignored) { }
+
+        return out;
+    }
+
+
     @Override
     public Integer updateUser(Integer userId, String newUsername) {
         if (userId == null || newUsername == null || newUsername.isEmpty()) return null;

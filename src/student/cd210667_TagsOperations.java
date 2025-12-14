@@ -213,4 +213,15 @@ public class cd210667_TagsOperations implements TagsOperations {
         } catch (SQLException ignored) {}
         return out;
     }
+
+    void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            // Ignore
+        }
+    }
+
 }
