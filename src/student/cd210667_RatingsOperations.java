@@ -57,6 +57,26 @@ public class cd210667_RatingsOperations implements RatingsOperations {
     }
 
     @Override
+    public Double getAverageRatingForMovie(Integer movieId) {
+        if (movieId == null) return null;
+        ensureConnection();
+
+        final String sql = "SELECT AVG(CAST(Ocena AS DECIMAL(10,4))) FROM dbo.Ocena WHERE FilmID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, movieId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return null;
+                double avg = rs.getDouble(1);
+                return rs.wasNull() ? null : avg;  // ako nema ocena -> null
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+
+    @Override
     public boolean updateRating(Integer userId, Integer movieId, Integer value) {
         if (userId == null || movieId == null || value == null) return false;
         if (value < 1 || value > 10) return false;
